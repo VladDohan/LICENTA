@@ -1,0 +1,6 @@
+framework:
+    cache:
+        pools:
+            market.cache:
+                adapter: cache.adapter.filesystem
+                default_lifetime: 86400 # 24 ore

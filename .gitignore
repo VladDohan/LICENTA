@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cache and logs (Symfony2)
 /app/cache/*
 /app/logs/*
@@ -50,3 +51,15 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+=======
+/vendor/
+/.env
+/var/
+/public/bundles/
+/public/build/
+/node_modules/
+npm-debug.log
+yarn-error.log
+ed25519_private.pem
+ed25519_public.pem
+>>>>>>> ea6f9e7 (Proiect Symfony inițial)

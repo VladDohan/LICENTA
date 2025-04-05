@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/css/animate.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/animation.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/fonts/fonts.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/icons/style.css') }}">
+
+{% endblock %}
+
+{% block body %}
+
+    <!-- #wrapper -->
+    <div id="wrapper">
+        <!-- #page -->
+        <div id="page" class="">
+            <div class="sign-in-wrap">
+                <div class="sign-in-box">
+                    <div class="left">
+                        <div class="content">
+                            <h3 class="heading">
+                                Hello
+                                <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Your SVG code here -->
+                                </svg>
+                            </h3>
+                            <div class="sub f12-regular text-GrayDark">Welcome again to our website</div>
+                            <div class="sign-in-inner">
+                                <h4>Create An Account</h4>
+
+                                {% for flash_error in app.flashes('verify_email_error') %}
+                                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                                {% endfor %}
+
+                                {{ form_start(registrationForm, {'attr': {'class': 'form-login flex flex-column gap24'}}) }}
+                                    <fieldset class="name">
+                                        <div class="f14-regular mb-6">Full name</div>
+                                        <input class="flex-grow" type="text" placeholder="Enter your name" name="name" tabindex="0" value="" aria-required="true" required>
+                                    </fieldset>
+
+                                    <fieldset class="email">
+                                        <div class="f14-regular mb-6">Email here</div>
+                                        {{ form_widget(registrationForm.email, {'attr': {
+                                            'class': 'flex-grow',
+                                            'placeholder': 'Enter your email address'
+                                        }}) }}
+                                        {{ form_errors(registrationForm.email) }}
+                                    </fieldset>
+                                    <fieldset class="password">
+                                        <div class="f14-regular mb-6">Password here</div>
+                                        {{ form_widget(registrationForm.plainPassword, {'attr': {
+                                            'class': 'password-input flex-grow',
+                                            'placeholder': 'Enter your password'
+                                        }}) }}
+                                        <span class="show-pass">
+                                            <i class="icon-view view"></i>
+                                            <i class="icon-hide hide"></i>
+                                        </span>
+                                        {{ form_errors(registrationForm.plainPassword) }}
+                                    </fieldset>
+                                    
+                                    <div class="tf-cart-checkbox">
+                                        <div class="tf-checkbox-wrapp">
+                                            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'checkbox-item'}}) }}
+                                            <div>
+                                                <i class="icon-check"></i>
+                                            </div>
+                                        </div>
+                                        <div class="f14-regular">
+                                            By proceeding, you agree to the 
+                                            <a href="#" class="f14-bold">Terms and Conditions</a>
+                                        </div>
+                                        {{ form_errors(registrationForm.agreeTerms) }}
+                                    </div>
+                                    
+                                    <button type="submit" class="tf-button style-1 label-01 w-100">Sign Up</button>
+                                {{ form_end(registrationForm) }}
+                                
+                                <div class="f14-regular">
+                                    Already have an account?
+                                    <a href="{{ path('app_login') }}" class="f14-bold">Sign In</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {# <div class="right">
+                        <img src="{{ asset('build/images/item/bg-sign-in.jpg') }}" alt="">
+                        <div class="text">
+                            <img class="mb-12" src="{{ asset('build/images/item/sign-up.png') }}" alt="">
+                            <h3 class="mb-24 text-White">Buy & sell Each Digital <br> Cryptocurrency</h3>
+                            <div class="f14-regular text-White">
+                                Easily Buy bitcoin and other cryptocurrencies using <br>
+                                wide range of payment option. Discover exclusive <br>
+                                digital collection of us.
+                            </div>
+                        </div>
+                    </div> #}
+                </div>
+            </div>
+        </div>
+        <!-- /#page -->
+    </div>
+    <!-- /#wrapper -->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('build/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('build/js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ asset('build/js/main.js') }}"></script>
+{% endblock %}
