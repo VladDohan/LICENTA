@@ -22,13 +22,8 @@
                 <div class="sign-in-box">
                     <div class="left">
                         <div class="content">
-                            <h3 class="heading">
-                                Hello Kampbail
-                                <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <!-- Your SVG code here -->
-                                </svg>
-                            </h3>
-                            <div class="sub f12-regular text-GrayDark">Welcome again to our website</div>
+                            <h3 class="heading">Hello there!</h3>
+                            <div class="sub f12-regular text-GrayDark">Welcome to InvestiTrack</div>
                             <div class="sign-in-inner">
                                 <h4>Sign In Here</h4>
 
@@ -36,13 +31,7 @@
                                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                                 {% endif %}
 
-                                {% if app.user %}
-                                    <div class="mb-3">
-                                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-                                    </div>
-                                {% endif %}
-
-                                <form method="post" class="form-login flex flex-column gap24">
+                               <form method="post" action="{{ path('app_login_check') }}" class="form-login flex flex-column gap24">
                                     <fieldset class="email">
                                         <div class="f14-regular mb-6">Email here</div>
                                         <input type="email"
@@ -87,17 +76,6 @@
                                         Sign In
                                     </button>
                                 </form>
-
-                                {# <div>
-                                    <div class="f14-regular mb-6">Google sign in</div>
-                                    <a href="{{ path('connect_google_start') }}" class="f14-regular btn-signin-with">
-                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <!-- Google SVG icon -->
-                                        </svg>
-                                        Sign in with Google
-                                    </a>
-                                </div>
-                                 #}
                                 <div class="f14-regular">
                                     Don't have an account?
                                     <a href="{{ path('app_register') }}" class="f14-bold">Sign Up</a>
@@ -105,18 +83,6 @@
                             </div>
                         </div>
                     </div>
-                    {# <div class="right">
-                        <img src="{{ asset('build/images/item/bg-sign-in.jpg') }}" alt="">
-                        <div class="text">
-                            <img src="{{ asset('build/images/item/sign-in.png') }}" alt="">
-                            <h3 class="mb-24 text-White">Buy & sell Each Digital <br> Cryptocurrency</h3>
-                            <div class="f14-regular text-White">
-                                Easily Buy bitcoin and other cryptocurrencies using <br>
-                                wide range of payment option. Discover exclusive <br>
-                                digital collection of us.
-                            </div>
-                        </div>
-                    </div> #}
                 </div>
             </div>
         </div>
