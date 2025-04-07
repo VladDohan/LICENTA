@@ -19,6 +19,14 @@ Encore
             to: 'css/[path][name].[ext]'
         },
         {
+            from: './assets/custom/css',
+            to: 'css/[path][name].[ext]'
+        },
+        {
+            from: './assets/custom/js',
+            to: 'js/[path][name].[ext]'
+        },
+        {
             from: './assets/theme/js',
             to: 'js/[path][name].[ext]'
         },

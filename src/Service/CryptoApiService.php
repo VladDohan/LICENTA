@@ -5,6 +5,7 @@ namespace App\Service;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\CacheItem;
 
 class CryptoApiService
 {
@@ -22,49 +23,95 @@ class CryptoApiService
         $this->logger = $logger;
     }
 
+    public function searchCryptoSymbols(string $query): array
+    {
+        $symbols = $this->getAllCryptoSymbols();
+        
+        if (empty(trim($query))) {
+            return $symbols;
+        }
+
+        $query = strtoupper(trim($query));
+        
+        return array_filter($symbols, function($symbol) use ($query) {
+            return str_starts_with($symbol['symbol'], $query) ||
+                   str_contains(strtoupper($symbol['name']), $query);
+        });
+    }
     public function getAllCryptoSymbols(): array
     {
-        return $this->cache->get('binance_symbols', function() {
-            $response = $this->httpClient->request('GET', 'https://api.binance.com/api/v3/exchangeInfo');
-            $data = $response->toArray();
+        return $this->cache->get('binance_symbols', function(CacheItem $item) {
+            $item->expiresAfter(3600); // 1 hour cache
 
-            return array_map(function($symbol) {
-                $baseAsset = $symbol['baseAsset'];
-                return [
-                    'symbol' => $symbol['symbol'],
-                    'name' => $baseAsset,
-                    'type' => 'crypto',
-                    'image' => $this->getCryptoIconUrl($baseAsset)
-                ];
-            }, $data['symbols']);
+            try {
+                $response = $this->httpClient->request('GET', 'https://api.binance.com/api/v3/exchangeInfo');
+                $data = $response->toArray();
+
+                $symbols = [];
+                foreach ($data['symbols'] as $symbolData) {
+                    if (str_ends_with($symbolData['symbol'], 'USDT')) {
+                        $symbols[] = [
+                            'symbol' => $symbolData['symbol'],
+                            'name' => $symbolData['baseAsset'],
+                            'type' => 'crypto',
+                            // 'image' => $this->getCryptoIconUrl($symbolData['baseAsset'])
+                        ];
+                    }
+                }
+
+                return $symbols;
+
+            } catch (\Exception $e) {
+                $this->logger->error('Failed to fetch symbols: '.$e->getMessage());
+                return [];
+            }
         });
     }
 
     public function getCryptoPriceWithChange(string $symbol): array
     {
-        $response = $this->httpClient->request('GET', 'https://api.binance.com/api/v3/ticker/24hr', [
-            'query' => ['symbol' => $symbol]
-        ]);
+        return $this->cache->get('crypto_price_'.md5($symbol), function(CacheItem $item) use ($symbol) {
+            $item->expiresAfter(60); // 1 minute cache
 
-        $data = $response->toArray();
-        $baseAsset = preg_replace('/USDT|BTC|ETH|USD$/i', '', $symbol);
+            try {
+                $response = $this->httpClient->request('GET', 'https://api.binance.com/api/v3/ticker/24hr', [
+                    'query' => ['symbol' => $symbol],
+                    'timeout' => 5
+                ]);
 
-        return [
-            'price' => $data['lastPrice'],
-            'change' => $data['priceChangePercent'],
-            'type' => 'crypto',
-            'image' => $this->getCryptoIconUrl($baseAsset)
-        ];
+                $data = $response->toArray();
+
+                if (!isset($data['lastPrice'])) {
+                    throw new \RuntimeException('Invalid API response');
+                }
+
+                return [
+                    'price' => (float)$data['lastPrice'],
+                    'change' => (float)$data['priceChangePercent'],
+                    'type' => 'crypto',
+                    'image' => $this->getCryptoIconUrl(
+                        $this->extractBaseAsset($symbol)
+                    )
+                ];
+
+            } catch (\Exception $e) {
+                $this->logger->error("Price fetch failed for {$symbol}: ".$e->getMessage());
+                throw $e;
+            }
+        });
     }
 
-    PUBLIC function getCryptoIconUrl(string $symbol): string
+    public function getCryptoIconUrl(string $symbol): string
     {
         $symbol = strtolower($symbol);
         $cacheKey = 'crypto_icon_'.$symbol;
 
-        return $this->cache->get($cacheKey, function() use ($symbol) {
-            // Ordered by reliability (first successful source will be used)
+        return $this->cache->get($cacheKey, function(CacheItem $item) use ($symbol) {
+            $item->expiresAfter(86400); // 24 hours
+
             $sources = [
+                "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1.1.2/128/color/{$symbol}.png",
+                "https://cryptoicon-api.vercel.app/api/icon/{$symbol}",
                 "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/{$symbol}.png",
             ];
 
@@ -78,18 +125,32 @@ class CryptoApiService
         });
     }
 
+    private function extractBaseAsset(string $symbol): string
+    {
+        $symbols = $this->getAllCryptoSymbols();
+        foreach ($symbols as $s) {
+            if ($s['symbol'] === $symbol) {
+                return $s['name'];
+            }
+        }
+        return preg_replace('/USDT$/', '', $symbol);
+    }
+
     private function isImageAvailable(string $url): bool
     {
-        // Skip check for local files
         if (str_starts_with($url, '/')) {
             return true;
         }
 
         try {
-            $response = $this->httpClient->request('HEAD', $url);
+            $response = $this->httpClient->request(
+                'GET',
+                $url,
+                ['timeout' => 2]
+            );
             return $response->getStatusCode() === 200;
         } catch (\Exception $e) {
-            $this->logger->debug("Image not available: {$url} - {$e->getMessage()}");
+            $this->logger->debug("Image unavailable: {$url}");
             return false;
         }
     }

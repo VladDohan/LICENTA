@@ -80,6 +80,9 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY --link frankenphp/conf.d/20-app.prod.ini $PHP_INI_DIR/app.conf.d/
 COPY --link frankenphp/worker.Caddyfile /etc/caddy/worker.Caddyfile
 
+RUN composer require symfony/orm-pack
+RUN composer require symfony/maker-bundle --dev
+
 # Install application dependencies
 COPY --link composer.* symfony.* ./
 RUN set -eux; \

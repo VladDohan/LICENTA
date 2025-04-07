@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Asset;
+use App\Enum\TransactionType;
 use App\Entity\Traits\Timestampable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: 'App\Repository\LogAssetRepository')]
+#[ORM\Entity(repositoryClass: 'App\Repository\TransactionRepository')]
 #[ORM\Table(name: 'log_asset')]
 #[ORM\HasLifecycleCallbacks]
-class LogAsset
+class Transaction
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,9 +30,13 @@ class LogAsset
     #[Assert\Positive(message: 'The buy price must be positive')]
     private string $sellPrice;
 
+    #[ORM\Column(type: 'string', enumType: TransactionType::class)]
+    #[Assert\NotBlank]
+    private ?TransactionType $transactionType = null;
 
     #[ORM\Column(type: 'string', length: 20)]
-    private string $quantity;
+    #[Assert\NotBlank]
+    private string $amount;
 
     public function getId(): ?int
     {
@@ -70,14 +75,14 @@ class LogAsset
         return $this;
     }
 
-    public function getQuantity(): string
+    public function getAmount(): string
     {
-        return $this->quantity;
+        return $this->amount;
     }
 
-    public function setQuantity(string $quantity): self
+    public function setAmount(string $amount): self
     {
-        $this->quantity = $quantity;
+        $this->amount = $amount;
         return $this;
     }
 

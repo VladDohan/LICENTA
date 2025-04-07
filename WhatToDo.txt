@@ -1,0 +1,128 @@
+1. Pagina de Autentificare & Înregistrare
+Design:
+
+Formular minimalist cu câmpuri pentru email/username și parolă.
+
+Buton de "Autentificare" + link către "Înregistrare" (sau viceversa).
+
+Opțiuni de login cu Google/Apple dacă dorești integrare socială.
+
+Înregistrarea: Adaugă câmpuri pentru nume, email, parolă, confirmare parolă.
+
+Stil: Fundal deschis cu accent pe un logo centrat și culori corporative (ex. albastru închis + verde financiar).
+
+2. Dashboard Principal
+Elemente cheie:
+
+Meniu lateral (sidebar) cu toate paginile aplicației (iconițe + text).
+
+Sumar portofoliu:
+
+Profit/pierdere ultima lună (cu indicator vizual ▲▼ și %).
+
+Distribuție active (pie chart simplu: acțiuni vs. crypto vs. altele).
+
+Evoluție 24h: Listă compactă cu top 3 active (▲▼ + %).
+
+Secțiune rapidă: Butoane pentru "Adaugă activ", "Vezi piețe", "Exportă date".
+
+Stil: Carduri cu border-radius, culori neutre (evită prea multe grafice).
+
+3. Gestionare Portofoliu
+Tabel principal:
+
+Coloane: Activ (nume + simbol), Cantitate, Preț achiziție, Valoare curentă, Profit/Pierdere (absolut + %), Acțiuni (edit/șterge).
+
+Filtre: După tip (acțiuni/crypto/etc.), dată achiziție, profitabilitate.
+
+Adăugare activ: Modal cu câmpuri pentru toate detaliile (preț, cantitate, dată, note).
+
+Detalii activ: La click, afișează un istoric simplu (linie temporală cu evenimente: cumpărare/vânzare).
+
+Recomandare:
+
+Nu adăuga charturi complexe aici (doar % și sumare).
+
+4. Monitorizare Piață
+Structură:
+
+Bara de căutare rapidă pentru active.
+
+Lista de active: Preț curent, modificare 24h, volum (sortabil).
+
+Detalii activ: La click, afișează:
+
+Preț istoric (un grafic simplu de linie, max. 30 zile, fără tool-uri TradingView).
+
+Știri relevante (dacă integrezi un API de știri).
+
+Alertă personalizată: Buton pentru "Setează alertă la preț" (ex: "Notifică-mă când BTC ajunge la X").
+
+De ce fără TradingView:
+
+Aplicația e pentru management, nu trading. Graficul simplu de linie e suficient.
+
+5. Statistici & Performanță
+Elemente:
+
+Grafic evoluție portofoliu (linie sau bar chart, perioadă selectabilă: săptămână/lună/an).
+
+Tabel comparativ: Profit/lună sau/an.
+
+Export Excel: Buton clar în header.
+
+Secțiune "Top Performeri": Cele mai bune/cele mai slabe active.
+
+Filtre: După tip activ, interval temporal.
+
+6. Setări Cont
+Formular simplu pentru actualizare nume, email, parolă.
+
+Opțiuni pentru:
+
+Limba aplicației.
+
+Notificări (enable/disable).
+
+Ștergere cont.
+
+7. Notificări
+Tipuri de notificări:
+
+Alertă preț (ex: "BTC a atins 50.000 USD").
+
+Recomandare (ex: "Portofoliul tău a crescut cu 5% săptămâna asta").
+
+Rapoarte lunare generate automat.
+Design: Listă cu notificări (dată + iconiță de tip) + buton "Marchează ca citit".
+
+8. Ajutor & Suport
+FAQ structurat pe categorii (ex: "Portofoliu", "Piață").
+
+Formular de contact cu echipa (câmpuri: subiect, mesaj).
+
+Link-uri către ghiduri PDF/video (dacă există).
+
+Recomandări Generale:
+Prioritizează funcționalitatea: Mai puține grafice, mai multă claritate în date.
+
+API-uri utile:
+
+CoinGecko sau Yahoo Finance pentru prețuri crypto/acțiuni.
+
+EmailJS pentru notificări prin email.
+
+Stil UI:
+
+Culori: Albastru închis (#1E2A3A) + verde financiar (#4CAF50) pentru butoane.
+
+Font: Inter sau Roboto pentru lizibilitate.
+
+Mobil-first: Asigură-te că merge bine pe telefon (meniu compact, tabel responsive).
+
+Ce să eviți:
+Chart-uri complexe: Dacă nu e necesar, graficul de linie simplu e suficient.
+
+Informații redundante: Ex: nu afișa prețul BTC în 5 locuri diferite.
+
+Dacă ai nevoie de wireframe-uri vizuale sau detalii tehnice suplimentare, pot să le sketch-uiesc!

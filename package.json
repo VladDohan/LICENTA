@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "bootstrap-select": "^1.13.18",
+        "lightweight-charts": "^5.0.5",
         "tom-select": "^2.4.3"
     }
 }

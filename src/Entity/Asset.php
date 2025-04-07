@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Enum\AssetType;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AssetRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AssetRepository::class)]
 #[ORM\Table(name: 'asset')]
@@ -20,13 +21,16 @@ class Asset
     private User $user;
 
     #[ORM\Column(type: 'string', enumType: AssetType::class)]
+    #[Assert\NotBlank]
     private AssetType $type;
 
     #[ORM\Column(type: 'string', length: 20)]
+    #[Assert\NotBlank]
     private string $symbol;
 
     #[ORM\Column(type: 'decimal', precision: 20, scale: 8)]
-    private string $quantity;
+    #[Assert\NotBlank]
+    private string $amount;
 
     public function getId(): ?int
     {
@@ -66,14 +70,14 @@ class Asset
         return $this;
     }
 
-    public function getQuantity(): string
+    public function getAmount(): string
     {
-        return $this->quantity;
+        return $this->amount;
     }
 
-    public function setQuantity(string $quantity): self
+    public function setAmount(string $amount): self
     {
-        $this->quantity = $quantity;
+        $this->amount = $amount;
         return $this;
     }
 
