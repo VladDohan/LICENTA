@@ -34,23 +34,31 @@
                             <div class="sign-in-inner">
                                 <h4>Create An Account</h4>
 
-                                {% for flash_error in app.flashes('verify_email_error') %}
-                                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-                                {% endfor %}
+                                {% if registrationForm.email.vars.errors|length > 0 %}
+                                    <div class="alert alert-danger">{{ form_errors(registrationForm.email) }}</div>
+                                {% endif %}
 
                                 {{ form_start(registrationForm, {'attr': {'class': 'form-login flex flex-column gap24'}}) }}
-                                    <fieldset class="name">
-                                        <div class="f14-regular mb-6">Full name</div>
-                                        <input class="flex-grow" type="text" placeholder="Enter your name" name="name" tabindex="0" value="" aria-required="true" required>
+                                    <fieldset class="firstName">
+                                        <div class="f14-regular mb-6">First name</div>
+                                        {{ form_widget(registrationForm.firstName, {'attr': {
+                                            'class': 'flex-grow',
+                                            'placeholder': 'Enter your first name'
+                                        }}) }}
                                     </fieldset>
-
+                                    <fieldset class="lastName">
+                                        <div class="f14-regular mb-6">Last name</div>
+                                        {{ form_widget(registrationForm.lastName, {'attr': {
+                                            'class': 'flex-grow',
+                                            'placeholder': 'Enter your last name'
+                                        }}) }}
+                                    </fieldset>
                                     <fieldset class="email">
                                         <div class="f14-regular mb-6">Email here</div>
                                         {{ form_widget(registrationForm.email, {'attr': {
                                             'class': 'flex-grow',
                                             'placeholder': 'Enter your email address'
                                         }}) }}
-                                        {{ form_errors(registrationForm.email) }}
                                     </fieldset>
                                     <fieldset class="password">
                                         <div class="f14-regular mb-6">Password here</div>
@@ -64,7 +72,6 @@
                                         </span>
                                         {{ form_errors(registrationForm.plainPassword) }}
                                     </fieldset>
-                                    
                                     <div class="tf-cart-checkbox">
                                         <div class="tf-checkbox-wrapp">
                                             {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'checkbox-item'}}) }}
@@ -78,10 +85,8 @@
                                         </div>
                                         {{ form_errors(registrationForm.agreeTerms) }}
                                     </div>
-                                    
                                     <button type="submit" class="tf-button style-1 label-01 w-100">Sign Up</button>
                                 {{ form_end(registrationForm) }}
-                                
                                 <div class="f14-regular">
                                     Already have an account?
                                     <a href="{{ path('app_login') }}" class="f14-bold">Sign In</a>

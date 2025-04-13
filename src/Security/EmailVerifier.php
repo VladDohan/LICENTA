@@ -24,14 +24,12 @@ class EmailVerifier
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             (string) $user->getId(),
-            (string) $user->getEmail()
+            (string) $user->getEmail(),
+            ['id' => $user->getId()]
         );
 
         $context = $email->getContext();
         $context['signedUrl'] = $signatureComponents->getSignedUrl();
-        $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
-        $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
-
         $email->context($context);
 
         $this->mailer->send($email);
@@ -42,11 +40,19 @@ class EmailVerifier
      */
     public function handleEmailConfirmation(Request $request, User $user): void
     {
-        $this->verifyEmailHelper->validateEmailConfirmationFromRequest($request, (string) $user->getId(), (string) $user->getEmail());
+        try {
+            $this->verifyEmailHelper->validateEmailConfirmationFromRequest(
+                $request,
+                (string) $user->getId(),
+                (string) $user->getEmail()
+            );
 
-        $user->setIsVerified(true);
+            $user->setIsVerified(true);
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        } catch (VerifyEmailExceptionInterface $e) {
+            throw $e;
+        }
     }
 }

@@ -30,6 +30,7 @@ security:
         - { path: ^/login$, roles: PUBLIC_ACCESS }  # Exact /login is public
         - { path: ^/login/check$, roles: PUBLIC_ACCESS }  # Make sure check path is public
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/verify/email, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }  # All other routes require auth
 
 when@test:
